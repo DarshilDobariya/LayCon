@@ -5,7 +5,7 @@ import Sidebar from '../components/sidebar/Sidebar';
 
 const Layout = () => {
   return (
-    <div style={{ display: 'flex' }} className='h-screen red'>
+    <div style={{ display: 'flex' }} className='h-screen'>
       <Sidebar />
       <div style={{ flex: 1 }} className='h-full'>
         <Outlet />
