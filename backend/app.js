@@ -17,48 +17,71 @@ app.get('/', (req, res) => {
 });
 
 app.post('/submit', (req, res) => {
-  const data = {
-    age: req.body.age,
-    educationField: req.body.educationField,
-    jobRole: req.body.jobRole,
-    department: req.body.department,
-    industry: req.body.industry,
-    stage: req.body.stage,
-    education: req.body.education,
-    fundsRaised: req.body.fundsRaised,
-    performanceRating: req.body.performanceRating,
-    jobSatisfaction: req.body.jobSatisfaction,
-    jobInvolvement: req.body.jobInvolvement,
-    yearsAtCompany: req.body.yearsAtCompany,
-    yearsInCurrentRole: req.body.yearsInCurrentRole,
-    yearsWithCurrManager: req.body.yearsWithCurrManager,
-    monthlyincome:req.body.monthlyincome,
-    numcompaniesworked:req.body.numcompaniesworked,
-    gender:req.body.gender
+  console.log(req.body);
+
+  // Convert keys to capitalized form
+  const capitalizeKeys = (obj) => {
+    const capitalizedObj = {};
+    for (let key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        const capitalizedKey = key.charAt(0).toUpperCase() + key.slice(1);
+        capitalizedObj[capitalizedKey] = obj[key];
+      }
+    }
+    return capitalizedObj;
   };
 
+  const data = {
+    Age: parseInt(req.body.age),
+    EducationField: parseInt(req.body.educationField),
+    JobRole: parseInt(req.body.jobRole),
+    Department: parseInt(req.body.department),
+    Industry: parseInt(req.body.industry),
+    Stage: parseInt(req.body.stage),
+    Education: parseInt(req.body.education),
+    'Funds_Raised(m)': parseFloat(req.body.fundsRaised),
+    PerformanceRating: parseInt(req.body.performanceRating),
+    JobSatisfaction: parseInt(req.body.jobSatisfaction),
+    JobInvolvement: parseInt(req.body.jobInvolvement),
+    YearsAtCompany: parseInt(req.body.yearsAtCompany),
+    YearsInCurrentRole: parseInt(req.body.yearsInCurrentRole),
+    YearsWithCurrManager: parseInt(req.body.yearsWithCurrManager),
+    MonthlyIncome: parseInt(req.body.monthlyincome),
+    NumCompaniesWorked: parseInt(req.body.numcompaniesworked),
+    Gender: parseInt(req.body.gender)
+  };
+
+  const capitalizedData = capitalizeKeys(data);
+
   const pythonFileName = path.join(__dirname, 'python', 'predict.py');
-  const formData = JSON.stringify(data);
+  const formData = JSON.stringify(capitalizedData);
 
   const pythonProcess = spawn('python', [pythonFileName, formData]);
   console.log('Python process spawned');
   console.log(formData);
 
-  pythonProcess.stdout.on('data', (data) => {
-    console.log('Received data from Python process');
-    const predictions = data.toString();
-    console.log('Prediction:', predictions);
+  let pythonData = '';
+  let pythonError = '';
 
-    res.send(`Percentage Chance of Layoff: ${predictions}%`);
+  pythonProcess.stdout.on('data', (data) => {
+    pythonData += data.toString();
   });
 
   pythonProcess.stderr.on('data', (data) => {
-    console.error(`stderr: ${data}`);
-    res.status(500).send('An error occurred');
+    pythonError += data.toString();
   });
 
   pythonProcess.on('close', (code) => {
-    console.log(`child process exited with code ${code}`);
+    if (code !== 0 || pythonError) {
+      console.error(`Python error: ${pythonError}`);
+      if (!res.headersSent) {
+        return res.status(500).send(`Python script error: ${pythonError}`);
+      }
+    } else {
+      if (!res.headersSent) {
+        res.json({ percentageChanceOfLayoff: parseFloat(pythonData.trim()) });
+      }
+    }
   });
 });
 
