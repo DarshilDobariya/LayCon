@@ -1,41 +1,51 @@
 import sys
-import json
 import pandas as pd
 import joblib
+import json
 
-model_filename = 'G:\\Windsor MAC\\SEM 2\\ADT\\project\\ADT\\Laycon\\python\\rf.pkl'
-scaler_filename = 'G:\\Windsor MAC\\SEM 2\\ADT\\project\\ADT\\Laycon\\python\\scaler.pkl'
-rfe_filename = 'G:\\Windsor MAC\\SEM 2\\ADT\\project\\ADT\\Laycon\\python\\rfe.pkl'
+def predict(data):
+    # Load the model, scaler, and RFE
+    model_filename = 'G:\\Windsor MAC\\SEM 2\\ADT\\project\\ADT\\Laycon\\backend\\python\\RF_MODEL.pkl'
+    scaler_filename = 'G:\\Windsor MAC\\SEM 2\\ADT\\project\\ADT\\Laycon\\backend\\python\\scaler.pkl'
+    rfe_filename = 'G:\\Windsor MAC\\SEM 2\\ADT\\project\\ADT\\Laycon\\backend\\python\\RFE.pkl'
 
-loaded_model = joblib.load(model_filename)
-loaded_scaler = joblib.load(scaler_filename)
-loaded_rfe = joblib.load(rfe_filename)
+    loaded_model = joblib.load(model_filename)
+    loaded_scaler = joblib.load(scaler_filename)
+    loaded_rfe = joblib.load(rfe_filename)
 
-training_feature_names = [
-    'Age', 'EducationField', 'JobRole', 'Department', 'Industry', 
-    'Stage', 'Education', 'Funds_Raised(m)', 'PerformanceRating', 
-    'JobSatisfaction', 'JobInvolvement', 'YearsAtCompany', 
-    'YearsInCurrentRole', 'YearsWithCurrManager','MonthlyIncome',
-    'NumCompaniesWorked', 'Gender'
-]
+    # Create a DataFrame from the input data
+    sample_adjusted = pd.DataFrame([data])
 
-def main():
+    # Features used during training (including 'Age')
+    training_feature_names = [
+        'Age', 'EducationField', 'JobRole', 'Department', 'Industry',
+        'Stage', 'Education', 'Funds_Raised(m)', 'PerformanceRating',
+        'JobSatisfaction', 'JobInvolvement', 'YearsAtCompany',
+        'YearsInCurrentRole', 'YearsWithCurrManager', 'MonthlyIncome',
+        'NumCompaniesWorked', 'Gender'
+    ]
+
+    # Ensure sample_data includes all relevant features
+    sample_adjusted = sample_adjusted[training_feature_names]
+
+    # Transform the sample data using the scaler
+    sample_adjusted_scaled = loaded_scaler.transform(sample_adjusted)
+
+    # Transform the scaled data using RFE
+    sample_adjusted_rfe = loaded_rfe.transform(sample_adjusted_scaled)
+
+    # Predict the probability
+    prob_adjusted = loaded_model.predict_proba(sample_adjusted_rfe)[:, 1]
+
+    return prob_adjusted[0] * 100
+
+if __name__ == "__main__":
     input_data = json.loads(sys.argv[1])
-    input_df = pd.DataFrame([input_data])
-
-    for col in training_feature_names:
-        if col not in input_df:
-            input_df[col] = 0
-
-    input_df = input_df[training_feature_names]
-
-    input_data_scaled = loaded_scaler.transform(input_df)
-    input_data_rfe = loaded_rfe.transform(input_data_scaled)
-
-    prob_adjusted = loaded_model.predict_proba(input_data_rfe)[:, 1]
-    layoff_probability = prob_adjusted[0] * 100
-
-    print(f"{layoff_probability:.2f}")
-
-if __name__ == '__main__':
-    main()
+    # Convert input_data values to appropriate data types
+    for key in input_data:
+        try:
+            input_data[key] = float(input_data[key])
+        except ValueError:
+            pass
+    prediction = predict(input_data)
+    print(prediction)
