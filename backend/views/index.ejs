@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layoff Prediction</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <h1>Layoff Prediction Form</h1>
+    <form action="/submit" method="post">
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required><br><br>
+
+        <label for="educationField">Education Field:</label>
+        <select id="educationField" name="educationField" required>
+            <option value="0">Human Resources</option>
+            <option value="1">Life Sciences</option>
+            <option value="2">Marketing</option>
+            <option value="3">Medical</option>
+            <option value="4">Other</option>
+            <option value="5">Technical Degree</option>
+        </select><br><br>
+
+        <label for="jobRole">Job Role:</label>
+        <select id="jobRole" name="jobRole" required>
+            <option value="0">Healthcare Representative</option>
+            <option value="1">Human Resources</option>
+            <option value="2">Laboratory Technician</option>
+            <option value="3">Network Engineer</option>
+            <option value="4">Operational Executive</option>
+            <option value="5">Project Manager</option>
+            <option value="6">Research Director</option>
+            <option value="7">Research Scientist</option>
+            <option value="8">Sales Executive</option>
+            <option value="9">Sales Representative</option>
+            <option value="10">Software Developer</option>
+            <option value="11">Team Lead</option>
+        </select><br><br>
+
+        <label for="department">Department:</label>
+        <select id="department" name="department" required>
+            <option value="0">Defence</option>
+            <option value="1">Human Resources</option>
+            <option value="2">IT department</option>
+            <option value="3">Research & Development</option>
+            <option value="4">Sales</option>
+            <option value="5">Tech Development</option>
+        </select><br><br>
+
+        <label for="industry">Industry:</label>
+        <select id="industry" name="industry" required>
+            <option value="0">Aerospace</option>
+            <option value="1">Education</option>
+            <option value="2">Finance</option>
+            <option value="3">Fitness</option>
+            <option value="4">Food</option>
+            <option value="5">Healthcare</option>
+            <option value="6">Logistics</option>
+            <option value="7">Real Estate</option>
+            <option value="8">Retail</option>
+            <option value="9">Sales</option>
+            <option value="10">Transportation</option>
+            <option value="11">Travel</option>
+        </select><br><br>
+
+        <label for="stage">Stage:</label>
+        <select id="stage" name="stage" required>
+            <option value="0">Acquired</option>
+            <option value="1">Post-IPO</option>
+            <option value="2">Private Equity</option>
+            <option value="3">Seed</option>
+            <option value="4">Series A</option>
+            <option value="5">Series B</option>
+            <option value="6">Series C</option>
+            <option value="7">Series D</option>
+            <option value="8">Series E</option>
+            <option value="9">Series F</option>
+            <option value="10">Series G</option>
+            <option value="11">Series H</option>
+            <option value="12">Series I</option>
+            <option value="13">Series J</option>
+            <option value="14">Subsidiary</option>
+            <option value="15">Unknown</option>
+        </select><br><br>
+
+        <label for="education">Education:</label>
+        <input type="number" id="education" name="education" required><br><br>
+
+        <label for="fundsRaised">Funds Raised (in millions):</label>
+        <input type="number" step="0.01" id="fundsRaised" name="fundsRaised" required><br><br>
+
+        <label for="performanceRating">Performance Rating:</label>
+        <input type="number" id="performanceRating" name="performanceRating" required><br><br>
+
+        <label for="jobSatisfaction">Job Satisfaction:</label>
+        <input type="number" id="jobSatisfaction" name="jobSatisfaction" required><br><br>
+
+        <label for="jobInvolvement">Job Involvement:</label>
+        <input type="number" id="jobInvolvement" name="jobInvolvement" required><br><br>
+
+        <label for="yearsAtCompany">Years at Company:</label>
+        <input type="number" id="yearsAtCompany" name="yearsAtCompany" required><br><br>
+
+        <label for="yearsInCurrentRole">Years in Current Role:</label>
+        <input type="number" id="yearsInCurrentRole" name="yearsInCurrentRole" required><br><br>
+
+        <label for="yearsWithCurrManager">Years with Current Manager:</label>
+        <input type="number" id="yearsWithCurrManager" name="yearsWithCurrManager" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
