@@ -5,9 +5,9 @@ import json
 
 def predict(data):
     # Load the model, scaler, and RFE
-    model_filename = 'G:\\Windsor MAC\\SEM 2\\ADT\\project\\ADT\\Laycon\\backend\\python\\RF_MODEL.pkl'
-    scaler_filename = 'G:\\Windsor MAC\\SEM 2\\ADT\\project\\ADT\\Laycon\\backend\\python\\scaler.pkl'
-    rfe_filename = 'G:\\Windsor MAC\\SEM 2\\ADT\\project\\ADT\\Laycon\\backend\\python\\RFE.pkl'
+    model_filename = 'E:\Projects\LayCon\\backend\python\\RF_MODEL.pkl'
+    scaler_filename = 'E:\Projects\LayCon\\backend\python\\scaler.pkl'
+    rfe_filename = 'E:\Projects\LayCon\\backend\python\\RFE.pkl'
 
     loaded_model = joblib.load(model_filename)
     loaded_scaler = joblib.load(scaler_filename)
